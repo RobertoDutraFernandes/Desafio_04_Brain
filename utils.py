@@ -130,24 +130,27 @@ nacionalidade = cnh[start19:end21, vstart7:vstart15]
 
 filiacao = cnh[ start21:end28, vstart7:vend15]
 
+info = [nome, p_hab, nasc, data_em, validade, doc, cpf, rg, cat, nacionalidade, filiacao]
 
-# Converter a imagem para escala de cinza e binarizar com limiar fixo
-gray = cv2.cvtColor(nome, cv2.COLOR_BGR2GRAY)
-_, binary_image = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+for var in info:
 
-gaussian = cv2.GaussianBlur(binary_image, (9, 9), 10.0)
-unsharp_image = cv2.addWeighted(gray, 1.8, gaussian, -0.5, 0)
+    # Converter a imagem para escala de cinza e binarizar com limiar fixo
+    gray = cv2.cvtColor(var, cv2.COLOR_BGR2GRAY)
+    _, binary_image = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+
+    gaussian = cv2.GaussianBlur(binary_image, (9, 9), 10.0)
+    unsharp_image = cv2.addWeighted(gray, 1.8, gaussian, -0.5, 0)
 
 
-custom_config = r'--oem 3 --psm 1'
-# Extrair texto da imagem binarizada
-text = pytesseract.image_to_string(unsharp_image, config=custom_config, lang='por')
+    custom_config = r'--oem 3 --psm 1'
+    # Extrair texto da imagem binarizada
+    text = pytesseract.image_to_string(unsharp_image, config=custom_config, lang='por')
 
-cv2.imshow('Processed Image', unsharp_image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+    cv2.imshow('Processed Image', unsharp_image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
-print(text)
+    print(text)
 
 """teste --psm config:
 1 (PSM_AUTO): Tesseract determina automaticamente a estrutura da página e faz a segmentação.
