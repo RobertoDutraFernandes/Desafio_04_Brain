@@ -3,9 +3,9 @@ import cv2
 import numpy as np
 
 # Definir o caminho do executável Tesseract trabalho
-pytesseract.pytesseract.tesseract_cmd = r"C:/Users/ADM/AppData/Local/Programs/Tesseract-OCR/tesseract.exe"
+#pytesseract.pytesseract.tesseract_cmd = r"C:/Users/ADM/AppData/Local/Programs/Tesseract-OCR/tesseract.exe"
 # Definir o caminho do executável Tesseract casa
-#pytesseract.pytesseract.tesseract_cmd = r"C:/Users/Pichau/AppData/Local/Programs/Tesseract-OCR/tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = r"C:/Users/Pichau/AppData/Local/Programs/Tesseract-OCR/tesseract.exe"
 
 
 # Carregar a imagem trabalho
@@ -63,7 +63,7 @@ start23 = end22
 end23 = 23 * end1
 start24 = end23
 end24 = 24 * end1
-start25 = end24
+start25 = (end24) - 5
 end25 = 25 * end1
 start26 = end25
 end26 = 26 * end1
@@ -94,44 +94,45 @@ vstart6 = vend5
 vend6 = 6 * vend1
 vstart7 = vend6
 vend7 = 7 * vend1
-vstart8 = vend7
+vstart8 = (vend7) + 5
 vend8 = 8 * vend1
 vstart9 = vend8
 vend9 = 9 * vend1
 vstart10 = vend9
-vend10 = 10 * vend1
+vend10 = (10 * vend1) + 10
 vstart11 = vend10
 vend11 = 11 * vend1
 vstart12 = vend11
-vend12 = 12 * vend1
+vend12 = (12 * vend1) + 10
 vstart13 = vend12
 vend13 = 13 * vend1
-vstart14 = vend13
-vend14 = 14 * vend1
+vstart14 = (vend13) + 10
+vend14 = (14 * vend1) - 10
 vstart15 = vend14
 vend15 = 15 * vend1
 
 # Selecionar somente a parte desejada
-nome = cnh[start8:end10, vstart3:vend11]
+nome = cnh[start9:end10, vstart4:vend11]
 
-doc_or = cnh[start10:end13, vend7:vend13]
+doc_or = cnh[start12:end13, vend7:vend13]
 
-cpf = cnh[start13:end16, vend7:vend11]
-dat_nas = cnh[start13:end16, vstart12:vstart15]
+cpf = cnh[start15:end16, vend7:vend11]
+dat_nas = cnh[start15:end16, vstart12:vstart14]
 
-filiacao = cnh[ start16:end23, vstart8:vend14]
+filiacao = cnh[ start17:end23, vstart8:vend14]
 
-cat_hab = cnh [ start24:end26, vend12:vend14]
+cat_hab = cnh [ start25:end26, vend12:vend14]
 
-rg = cnh [start27:end29, vend3:vend7]
-validade = cnh [start27:end29, vend7:vend10]
-p_hab = cnh [start27:end29, vend10:vend14]
+rg = cnh [start28:end29, vend3:vend7]
+validade = cnh [start28:end29, vstart8:vend10]
+p_hab = cnh [start28:end29, vend10:vend13]
 
-info_p = [nome, doc_or, cpf, dat_nas, filiacao, p_hab]
-info_v = [cat_hab,rg,validade]
+info_p = {"Nome:":nome, "Doc. Identidade:":doc_or, "CPF:":cpf, "Data de Nascimento:":dat_nas,
+        "Filiação:":filiacao, "1ª Habilitação:":p_hab}
+info_v = {"Cat. Hab.:":cat_hab, "RG:":rg, "Validade:":validade}
 info_t = [nome, doc_or, cpf, dat_nas, filiacao,cat_hab,rg,validade, p_hab]
 
-for var_p in info_p:
+for var_name, var_p in info_p.items():
     # Converter a imagem para escala de cinza
     gray = cv2.cvtColor(var_p, cv2.COLOR_BGR2GRAY)
     _, binary_image = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
@@ -143,14 +144,14 @@ for var_p in info_p:
     custom_config = r'--oem 3 --psm 1'
     # Extrair texto da imagem
     text = pytesseract.image_to_string(unsharp_image, config=custom_config, lang='por')
-
-    print(text)
+    print(var_name)
+    print(text + "\n")
 
     cv2.imshow('Processed Image', unsharp_image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-for var_v in info_v:
+for var_name, var_v in info_v.items():
     # Converter a imagem para escala de cinza 
     gray = cv2.cvtColor(var_v, cv2.COLOR_BGR2GRAY)
     equ = cv2.equalizeHist(gray)
@@ -163,8 +164,8 @@ for var_v in info_v:
     custom_config = r'--oem 3 --psm 1'
     # Extrair texto da imagem
     text = pytesseract.image_to_string(adjusted, config=custom_config, lang='por')
-
-    print(text)
+    print(var_name)
+    print(text + "\n")
 
     cv2.imshow('Processed Image', adjusted)
     cv2.waitKey(0)
