@@ -165,17 +165,17 @@ for var in info:
     print(text)
 """
 for var_v in info:
-    # Converter a imagem para escala de cinza e binarizar com limiar fixo
+    # Converter a imagem para escala de cinza 
     gray = cv2.cvtColor(var_v, cv2.COLOR_BGR2GRAY)
     equ = cv2.equalizeHist(gray)
 
-    # Alternativamente, você pode usar um ajuste gamma para aumentar o contraste
+    # Usar gamma para aumentar o contraste
     gamma = 2
     adjusted = np.uint8(np.clip((gray / 200.0) ** gamma * 280.0, 0, 255))
 
 
     custom_config = r'--oem 3 --psm 1'
-    # Extrair texto da imagem binarizada
+    # Extrair texto da imagem
     text = pytesseract.image_to_string(adjusted, config=custom_config, lang='por')
 
     print(text)
