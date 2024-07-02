@@ -3,9 +3,9 @@ import cv2
 import numpy as np
 
 # Definir o caminho do executável Tesseract trabalho
-# pytesseract.pytesseract.tesseract_cmd = r"C:/Users/ADM/AppData/Local/Programs/Tesseract-OCR/tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = r"C:/Users/ADM/AppData/Local/Programs/Tesseract-OCR/tesseract.exe"
 # Definir o caminho do executável Tesseract casa
-pytesseract.pytesseract.tesseract_cmd = r"C:/Users/Pichau/AppData/Local/Programs/Tesseract-OCR/tesseract.exe"
+#pytesseract.pytesseract.tesseract_cmd = r"C:/Users/Pichau/AppData/Local/Programs/Tesseract-OCR/tesseract.exe"
 
 
 # Carregar a imagem trabalho
@@ -116,7 +116,7 @@ nome = cnh[start8:end10, vstart3:vend11]
 
 doc_or = cnh[start10:end13, vend7:vend13]
 
-cpf = cnh[start13:end16, vend6:vend11]
+cpf = cnh[start13:end16, vend7:vend11]
 dat_nas = cnh[start13:end16, vstart12:vstart15]
 
 filiacao = cnh[ start16:end23, vstart8:vend14]
@@ -127,11 +127,13 @@ rg = cnh [start27:end29, vend3:vend7]
 validade = cnh [start27:end29, vend7:vend10]
 p_hab = cnh [start27:end29, vend10:vend14]
 
-info = [nome, doc_or, cpf, dat_nas, filiacao, cat_hab, rg, validade, p_hab]
+info_p = [nome, doc_or, cpf, dat_nas, filiacao, p_hab]
+info_v = [cat_hab,rg,validade]
+info_t = [nome, doc_or, cpf, dat_nas, filiacao,cat_hab,rg,validade, p_hab]
 
-for var in info:
+for var_p in info_p:
     # Converter a imagem para escala de cinza e binarizar com limiar fixo
-    gray = cv2.cvtColor(var, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(var_p, cv2.COLOR_BGR2GRAY)
     _, binary_image = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
 
     gaussian = cv2.GaussianBlur(binary_image, (9, 9), 10.0)
@@ -142,12 +144,32 @@ for var in info:
     # Extrair texto da imagem binarizada
     text = pytesseract.image_to_string(unsharp_image, config=custom_config, lang='por')
 
+    print(text)
+
     cv2.imshow('Processed Image', unsharp_image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
+for var_v in info_v:
+    # Converter a imagem para escala de cinza e binarizar com limiar fixo
+    gray = cv2.cvtColor(var_v, cv2.COLOR_BGR2GRAY)
+    equ = cv2.equalizeHist(gray)
+
+    # Alternativamente, você pode usar um ajuste gamma para aumentar o contraste
+    gamma = 1.5
+    adjusted = np.uint8(np.clip((gray / 150.0) ** gamma * 280.0, 0, 255))
+
+
+    custom_config = r'--oem 3 --psm 1'
+    # Extrair texto da imagem binarizada
+    text = pytesseract.image_to_string(adjusted, config=custom_config, lang='por')
+
     print(text)
 
+    cv2.imshow('Processed Image', adjusted)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    
 """teste --psm config:
 1 (PSM_AUTO): Tesseract determina automaticamente a estrutura da página e faz a segmentação.
 2 (PSM_SINGLE_BLOCK): Tesseract assume que há um único bloco de texto na imagem.

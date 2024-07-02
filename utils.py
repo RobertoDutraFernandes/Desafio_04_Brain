@@ -3,9 +3,9 @@ import cv2
 import numpy as np
 
 # Definir o caminho do executável Tesseract trabalho
-# pytesseract.pytesseract.tesseract_cmd = r"C:/Users/ADM/AppData/Local/Programs/Tesseract-OCR/tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = r"C:/Users/ADM/AppData/Local/Programs/Tesseract-OCR/tesseract.exe"
 # Definir o caminho do executável Tesseract casa
-pytesseract.pytesseract.tesseract_cmd = r"C:/Users/Pichau/AppData/Local/Programs/Tesseract-OCR/tesseract.exe"
+# pytesseract.pytesseract.tesseract_cmd = r"C:/Users/Pichau/AppData/Local/Programs/Tesseract-OCR/tesseract.exe"
 
 
 # Carregar a imagem trabalho
@@ -43,6 +43,7 @@ start13 = end12
 end13 = 13 * end1
 start14 = end13
 end14 = 14 * end1
+start14_5 = (14 * end1) - 10
 start15 = end14
 end15 = 15 * end1
 start16 = end15
@@ -77,11 +78,10 @@ start30 = end29
 end30 = 30 * end1
 
 
-
 # Separar a imagem em faixas verticais
 height, width = cnh.shape[:2]
 vstart1 = 0
-vend1 = width // 15
+vend1 = width // 20
 vstart2 = vend1
 vend2 = 2 * vend1
 vstart3 = vend2
@@ -106,32 +106,44 @@ vstart12 = vend11
 vend12 = 12 * vend1
 vstart13 = vend12
 vend13 = 13 * vend1
+vstart13_5 = (13 * vend1) - 15
 vstart14 = vend13
 vend14 = 14 * vend1
 vstart15 = vend14
 vend15 = 15 * vend1
+vstart16 = vend15
+vend16 = 16 * vend1
+vstart17 = vend16
+vend17 = 17 * vend1
+vstart18 = vend17
+vend18 = 18 * vend1
+vstart19 = vend18
+vend19 = 19 * vend1
+vstart20 = vend19
+vend20 = 20 * vend1
 
 # Selecionar somente a parte desejada
-nome = cnh[start7:end9, vstart3:vend11]
-p_hab = cnh[ start7:end9, vstart13:vstart15]
+nome = cnh[start7:end9, vstart4:vend12]
+p_hab = cnh[ start7:end9, vstart17:vstart20]
 
-nasc = cnh[start10:end11, vend6:vend11]
+nasc = cnh[start10:end11, vend8:vend15]
 
-data_em = cnh[start12:end14, vend6:vend9]
-validade = cnh[start12:end14, vstart10:vstart13]
+data_em = cnh[start12:end14, vend9:vend12]
+validade = cnh[start12:end14, vstart14:vstart17]
 
-doc = cnh[start15:end16, vstart7:vstart14]
+doc = cnh[start14_5:end16, vstart9:vstart17]
 
-cpf = cnh[start17:end18, vstart7:vstart10]
-rg = cnh[start17:end18, vstart11:vstart13]
-cat = cnh[start17:end18, vstart13:vstart15]
+cpf = cnh[start17:end18, vstart9:vstart13_5]
+rg = cnh[start17:end18, vstart14:vstart17]
+cat = cnh[start17:end18, vstart18:vstart20]
 
-nacionalidade = cnh[start19:end21, vstart7:vstart15]
+nacionalidade = cnh[start19:end21, vstart9:vstart15]
 
-filiacao = cnh[ start21:end28, vstart7:vend15]
+filiacao = cnh[ start21:end28, vstart9:vend15]
 
 info = [nome, p_hab, nasc, data_em, validade, doc, cpf, rg, cat, nacionalidade, filiacao]
 
+"""
 for var in info:
 
     # Converter a imagem para escala de cinza e binarizar com limiar fixo
@@ -151,7 +163,26 @@ for var in info:
     cv2.destroyAllWindows()
 
     print(text)
+"""
+for var_v in info:
+    # Converter a imagem para escala de cinza e binarizar com limiar fixo
+    gray = cv2.cvtColor(var_v, cv2.COLOR_BGR2GRAY)
+    equ = cv2.equalizeHist(gray)
 
+    # Alternativamente, você pode usar um ajuste gamma para aumentar o contraste
+    gamma = 2
+    adjusted = np.uint8(np.clip((gray / 200.0) ** gamma * 280.0, 0, 255))
+
+
+    custom_config = r'--oem 3 --psm 1'
+    # Extrair texto da imagem binarizada
+    text = pytesseract.image_to_string(adjusted, config=custom_config, lang='por')
+
+    print(text)
+    cv2.imshow('Processed Image', adjusted)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    
 """teste --psm config:
 1 (PSM_AUTO): Tesseract determina automaticamente a estrutura da página e faz a segmentação.
 2 (PSM_SINGLE_BLOCK): Tesseract assume que há um único bloco de texto na imagem.
