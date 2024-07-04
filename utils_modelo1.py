@@ -11,7 +11,7 @@ pytesseract.pytesseract.tesseract_cmd = r"C:/Users/Pichau/AppData/Local/Programs
 # Carregar a imagem trabalho
 #cnh = cv2.imread("C:/Users/ADM/Downloads/desafio_04_brain-20240628T105720Z-001/desafio_04_brain/cnh_boa.jpg")
 # carregar a imagem casa
-cnh = cv2.imread("./modelo_cnh1.jpg")
+cnh = cv2.imread("./modelo1_cnh.jpg")
 
 # Separar a imagem em faixas horizontais
 height, width = cnh.shape[:2]
