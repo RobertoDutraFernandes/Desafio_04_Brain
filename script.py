@@ -3,17 +3,19 @@ import cv2
 import utils
 
 # Abre a camera 0
-cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+cap = cv2.VideoCapture(2)
 # Carrega o modelo
-my_model = YOLO("C:/Users/Pichau/Documents/desafio_04_brain/Desafio_04_Brain/best.pt")
+my_model = YOLO("./best.pt")
 
 seguir =  False
 frozen_frame = None
 
-while True:
+while cap.isOpened():
     # Capturar frame da webcam
     success, frame = cap.read()
-
+    if success == False:
+        break
+     
     # Segue pro if se a captura for bem sucedida
     results = my_model(frame, conf = 0.75)
 
