@@ -5,7 +5,7 @@ import numpy as np
 # Definir o caminho do executável Tesseract trabalho
 #pytesseract.pytesseract.tesseract_cmd = r"C:/Users/ADM/AppData/Local/Programs/Tesseract-OCR/tesseract.exe"
 # Definir o caminho do executável Tesseract casa
-pytesseract.pytesseract.tesseract_cmd = r"C:/Users/Pichau/AppData/Local/Programs/Tesseract-OCR/tesseract.exe"
+#pytesseract.pytesseract.tesseract_cmd = r"C:/Users/Pichau/AppData/Local/Programs/Tesseract-OCR/tesseract.exe"
 
 
 # Carregar a imagem trabalho
