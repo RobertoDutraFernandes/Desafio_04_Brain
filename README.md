@@ -2,7 +2,7 @@
 Desafio de visão computacional
 
 # Objetivo:
-O desafio 4 proposto pelo BRAIN, consiste no desenvolvimento  e treinamento de um modelo de visão computacional, que possui como base um DataSet que contém um conjuto de imagens de CNHs, a partir destas, visa-se extrair informações de uma CNH inserida através de uma imagem baixada ou obtida através de uma webcam. Para isto o projeto foi dividido em 2 partes, sendo a primeira a extração de dados de uma imagem específica e a segunda a extração de dados de uma imagem obtida através de uma WebCam.
+O desafio 4 proposto pelo BRAIN, consiste no desenvolvimento  e treinamento de um modelo de visão computacional, que possui como base um DataSet que contém um conjunto de imagens de CNHs, a partir destas, visa-se extrair informações de uma CNH inserida através de uma imagem baixada ou obtida através de uma webcam. Para isto o projeto foi dividido em 2 partes, sendo a primeira a extração de dados de uma imagem específica e a segunda a extração de dados de uma imagem obtida através de uma WebCam.
 
 # Extrair informações de uma imagem (1ª parte):
 ## utils_modelo1 e utils_modelo2:
